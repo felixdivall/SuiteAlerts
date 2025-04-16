@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "SuiteAlerts",
+  "version": "1.0",
+  "description": "Replaces browser alerts with SweetAlert2 dialogs",
+
+  "content_scripts": [{
+    "matches": ["https://*.netsuite.com/*"],
+    "js": [
+      "inject.js"
+    ],
+    "css": ["sweetalert2.min.css"],
+    "run_at": "document_idle"
+  }],
+    "web_accessible_resources": [
+      {
+        "resources": ["sweetalert2.min.js", "override.js"],
+        "matches": ["https://*.netsuite.com/*"]
+      }
+    ],
+    "permissions": ["scripting", "activeTab"]
+}
