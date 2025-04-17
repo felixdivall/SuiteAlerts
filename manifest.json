@@ -1,9 +1,13 @@
 {
   "manifest_version": 3,
   "name": "SuiteAlerts",
-  "version": "1.0",
-  "description": "Replaces browser alerts with SweetAlert2 dialogs",
-
+  "version": "0.1.0",
+  "description": "Replaces browser alerts in NetSuite with SweetAlert2 dialogs",
+  "icons": {
+    "16": "images/logo16.png",
+    "48": "images/logo48.png",
+    "128": "images/logo128.png"
+  },
   "content_scripts": [{
     "matches": ["https://*.netsuite.com/*"],
     "js": [
