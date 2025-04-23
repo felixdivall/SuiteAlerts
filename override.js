@@ -7,8 +7,8 @@
     console.log('SweetAlert override active');
 
     const originalAlert = window.alert;
-    const originalConfirm = window.confirm;
-    const originalPrompt = window.prompt;
+    // const originalConfirm = window.confirm;
+    // const originalPrompt = window.prompt;
     let lastMessage = '';
     let lastType = '';
     let lastDefaultValue = '';
@@ -38,11 +38,11 @@
         isFromButton = true;
         if (lastType === 'alert') {
           window.alert(lastMessage);
-        } else if (lastType === 'confirm') {
-          window.confirm(lastMessage);
-        } else if (lastType === 'prompt') {
-          window.prompt(lastMessage, lastDefaultValue);
-        }
+        } // else if (lastType === 'confirm') {
+        //   window.confirm(lastMessage);
+        // } else if (lastType === 'prompt') {
+        //   window.prompt(lastMessage, lastDefaultValue);
+        // }
         button.remove();
         clearInterval(countdownInterval);
       });
@@ -60,9 +60,7 @@
       }, 10000);
     }
 
-    const successStrings = [
-      'is valid',
-    ]
+    const successStrings = ['is valid']
 
     window.alert = function (message) {
       lastMessage = message;
@@ -85,57 +83,63 @@
       }
     };
 
-    // Similar changes for confirm and prompt functions
-    window.confirm = function (message) {
-      lastMessage = message;
-      lastType = 'confirm';
-      
-      const result = Swal.fire({
-        icon: 'question',
-        title: 'Confirm',
-        text: message,
-        showCancelButton: true,
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        returnValue: true
-      });
+    // window.confirn and window.prompt are synchronous while SweetAlert2 is asynchronous
+    // Hence they won't function properly.
 
-      result.then((response) => {
-        if (!isFromButton) showButton();
-        isFromButton = false;
-      });
+    // Confirm attempt
+    // window.confirm = function (message) {
+    //   lastMessage = message;
+    //   lastType = 'confirm';
+    //   return new Promise((resolve) => {
+    //     try {
+    //       Swal.fire({
+    //         icon: 'question',
+    //         title: 'Confirm',
+    //         text: message,
+    //         showCancelButton: true,
+    //         confirmButtonText: 'OK',
+    //         cancelButtonText: 'Cancel'
+    //       }).then((result) => {
+    //         resolve(result.isConfirmed);
+    //         if (!isFromButton) showButton();
+    //         isFromButton = false;
+    //       });
+    //     } catch (error) {
+    //       console.error('SweetAlert2 confirm failed:', error);
+    //       resolve(originalConfirm(message));
+    //       if (!isFromButton) showButton();
+    //       isFromButton = false;
+    //     }
+    //   });
+    // };
 
-      return result.isConfirmed;
-    };
-
-    window.prompt = function (message, defaultValue) {
-      lastMessage = message;
-      lastType = 'prompt';
-      lastDefaultValue = defaultValue;
-      return new Promise((resolve) => {
-        try {
-          Swal.fire({
-            icon: 'question',
-            title: 'Prompt',
-            text: message,
-            input: 'text',
-            inputValue: defaultValue || '',
-            showCancelButton: true,
-            confirmButtonText: 'OK',
-            cancelButtonText: 'Cancel'
-          }).then((result) => {
-            resolve(result.isConfirmed ? result.value : null);
-            if (!isFromButton) showButton();
-            isFromButton = false;
-          });
-        } catch (error) {
-          console.error('SweetAlert2 prompt failed:', error);
-          resolve(originalPrompt(message, defaultValue));
-          if (!isFromButton) showButton();
-          isFromButton = false;
-        }
-      });
-    };
+    // Prompt attempt
+    // window.prompt = function (message, defaultValue) {
+    //   lastMessage = message;
+    //   lastType = 'prompt';
+    //   lastDefaultValue = defaultValue;
+    //   return new Promise((resolve) => {
+    //     try {
+    //       Swal.fire({
+    //         icon: 'question',
+    //         title: 'Prompt',
+    //         text: message,
+    //         input: 'text',
+    //         inputValue: defaultValue || '',
+    //         showCancelButton: true,
+    //         confirmButtonText: 'OK',
+    //         cancelButtonText: 'Cancel'
+    //       }).then((result) => {
+    //         resolve(result.isConfirmed ? result.value : null);
+    //         if (!isFromButton) showButton();
+    //         isFromButton = false;
+    //       });
+    //     } catch (error) {
+    //       console.error('SweetAlert2 prompt failed:', error);
+    //       resolve(originalPrompt(message, defaultValue));
+    //       if (!isFromButton) showButton();
+    //       isFromButton = false;
+    //     }
+    //   });
+    // };
 })();
